@@ -13,7 +13,7 @@ Create OVS and connect lan2,3,4 and WiFi. Keeping lan1 for OF controller (Recomm
 
 
 It will completely replace br-lan with OVS and connect all ports to the OVS, if you missed up things, then you have to reset the router or use Serial port.
-![alt text](./img/withoutSerial.png "OVS bridge completely replance br-lan")
+![alt text](./img/withSerial.png "OVS bridge completely replance br-lan")
 
 #First step:
 Upgrade TP-Link AC1750 C2 V2 to OpenWRT 15.05 which include OVS switch, or install OVS if you have OpenWRT on your router.
