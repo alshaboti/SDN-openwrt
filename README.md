@@ -4,7 +4,7 @@ Running SDN network using openwrt firmware
 
 Default TP-Link router internal diagram (from wiki.openwrt.org):
 
-
+![alt text](./img/defaultConf.png "TP-Link AC1750 default layout")
 
 
 
