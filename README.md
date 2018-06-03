@@ -3,7 +3,7 @@ Running SDN network using openwrt firmware
 
 
 Default TP-Link router internal diagram (from wiki.openwrt.org):
-![alt text](./img/defaultConf.png "TP-Link AC1750 default layout")
+![alt text](./img/linksys-EA4500_def_layout.png "linksys-EA4500 default layout")
 
 Create OVS and connect lan2,3,4 and WiFi. Keeping lan1 for OF controller (Recommended settings)
 ![alt text](./img/withoutSerial_.png "OVS bridge with one port for controller/management")
