@@ -27,7 +27,7 @@ uci set network.@switch_vlan[-1].ports=$port' 0t'
 p='lan'$lan
 uci set network.$p=interface
 uci set network.$p.proto='static'
-uci set network.$p.ifname='eth1.'$vlan
+uci set network.$p.ifname='eth0.'$vlan
 
 done
 
@@ -52,17 +52,19 @@ ovs-vsctl set-controller $OVSLAN tcp:$ctl_ip:$ctl_port
 
 # Add LAN port to Open vSwitch (ovslan)
 
-ovs-vsctl --may-exist add-port $OVSLAN wlan0
 for port in $ports
 do 
-ovs-vsctl --may-exist add-port $OVSLAN eth1.$((port+1)) -- set interfaceeth1.$((port+1)) ofport_request=$port
+ovs-vsctl --may-exist add-port $OVSLAN eth0.$((port+2)) -- set interface eth0.$((port+2)) ofport_request=$port
 done 
-
+# add Wifi
+ovs-vsctl --may-exist add-port $OVSLAN wlan0 -- set interface wlan0 ofport_request=$((port+1))
 #to add eth0 (wan)
 uci delete network.wan
 uci delete network.wan6
 uci commit network
-ovs-vsctl add-port $OVSLAN eth0
+ovs-vsctl add-port $OVSLAN eth1
+
+ovs-ofctl show  ovslan -O OpenFlow13
 
 uci commit network
 /etc/init.d/network restart
