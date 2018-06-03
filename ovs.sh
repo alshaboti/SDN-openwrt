@@ -4,31 +4,15 @@
 OVSLAN='ovslan'
 LINUXBRIDGE='br-lan'
 ctl_ip=192.168.1.100
-ctl_port=6633
-rep_br_lan='no'
-
-while true; do
-    read -p "Do you wish to replace br-lan(y,n)?" yn
-    case $yn in
-        [Yy]* ) rep_br_lan='yes'; break;;
-        [Nn]* ) break 2;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
-
-if [ '$rep_br_lan' = 'yes' ] 
-then
-ports=$(seq 2 5)
-uci set network.@switch_vlan[0].ports='0'
-else
-ports=$(seq 3 5)
-uci set network.@switch_vlan[0].ports='0 2'
-fi
+#for faucet SDN controller
+ctl_port=6653 
+ports=$(seq 1 3)
+uci set network.@switch_vlan[0].ports='0 5'
 
 for port in $ports
 do
-lan=$((port-1))
-vlan=$((port+1))
+lan=$((port+1))
+vlan=$((port+2))
 
 #add new array item
 uci add network switch_vlan
@@ -57,19 +41,6 @@ uci delete wireless.@wifi-iface[0].network;
 uci set wireless.@wifi-iface[0].isolate='1'
 uci commit wireless; wifi
 
-#replace br-lan with ovslan 
-
-if [ '$rep_br_lan' = 'yes' ] 
-then
-ifconfig $LINUXBRIDGE down
-uci delete network.lan.type
-uci set network.lan.ifname=$OVSLAN
-#delete eth1, wlan0 from br-lan
-brctl delif $LINUXBRIDGE eth1
-brctl delif $LINUXBRIDGE wlan0
-brctl delbr $LINUXBRIDGE
-fi
-
 # Create Open vSwitch
 ovs-vsctl --may-exist add-br $OVSLAN
 # set openflow13
@@ -84,7 +55,7 @@ ovs-vsctl set-controller $OVSLAN tcp:$ctl_ip:$ctl_port
 ovs-vsctl --may-exist add-port $OVSLAN wlan0
 for port in $ports
 do 
-ovs-vsctl --may-exist add-port $OVSLAN eth1.$((port+1))
+ovs-vsctl --may-exist add-port $OVSLAN eth1.$((port+1)) -- set interfaceeth1.$((port+1)) ofport_request=$port
 done 
 
 #to add eth0 (wan)
