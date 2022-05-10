@@ -16,14 +16,6 @@ With this sittings, if you missed up things, then you have to reset the router o
 ## First step:
 Upgrade TP-Link AC1750 C2 V2 to OpenWRT 15.05 which include OVS switch, or install OVS if you have OpenWRT on your router.
 
-Upgrade firmware if you have openWRT installed:
-https://drive.google.com/open?id=0BxgVJIO4HcYFT240SnZjc3RxZTg
-
-Install new firmwire if your router doens't run OpenWRT
-
-https://drive.google.com/open?id=0BxgVJIO4HcYFNjRPV2EwQldmLWM
-
-(Skip this step if you have OpenWRT with ovs installed)
 
 ## Second step:
 SSH into your tplink router ( ssh root@192.168.1.1)
@@ -32,3 +24,4 @@ Copy this script into ovsbr.sh file and then past it there  (vim ovsbr.sh ), pre
 Add run permission chmod +x ovsbr.sh 
 Then run the script
 ./ovslan.sh 
+Before answering replace 'br-lan', please read check the diagram above and read the instructiosn. 
